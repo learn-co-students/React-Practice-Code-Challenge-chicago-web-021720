@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import SushiContainer from './containers/SushiContainer';
 import Table from './containers/Table';
+import SushiWallet from './containers/SushiWallet'
 
 // Endpoint!
 const API = "http://localhost:3000/sushis"
@@ -11,7 +12,8 @@ class App extends Component {
     this.state ={
       sushis: [],
       money: 100,
-      plates: []
+      plates: [],
+      wallet: 0
     }
   }
 
@@ -56,7 +58,21 @@ class App extends Component {
 
   }
 
-  
+  updateWallet = (e) => {
+    const re = /^[0-9\b]+$/;
+    if (e.target.value === '' || re.test(e.target.value)) {
+      this.setState({wallet: e.target.value})
+   }
+  }
+
+  updateMoney = (e) => {
+    e.preventDefault()
+    this.setState(prevState => ({
+      money: prevState.money + parseInt(prevState.wallet),
+      wallet: 0
+    }))
+  }
+ 
 
 
   render() {
@@ -64,6 +80,7 @@ class App extends Component {
       <div className="app">
         <SushiContainer sushis={this.state.sushis} eatSushi={this.eatSushi}deleteSushi={this.deleteSushi}/>
         <Table plates={this.state.plates} money={this.state.money} />
+        <SushiWallet wallet={this.state.wallet} updateMoney={this.updateMoney} updateWallet={this.updateWallet}/>
       </div>
     );
   }
